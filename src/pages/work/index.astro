@@ -1,0 +1,65 @@
+---
+export const prerender = true
+
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import WorkCard from '../../components/WorkCard.astro'
+import { getCollection } from 'astro:content'
+
+const allWork = (await getCollection('work')).sort((a, b) => b.data.year - a.data.year)
+const allTags = [...new Set(allWork.flatMap((w) => w.data.tags))].sort()
+---
+
+<BaseLayout title="Work — Asif Asharaf" description="Selected design projects by Asif Asharaf.">
+  <div class="px-6 sm:px-8 py-16 sm:py-24">
+    <header class="mb-12 sm:mb-20 fade-up">
+      <h1 class="font-serif text-5xl sm:text-7xl text-fg mb-4">Work</h1>
+      <p class="text-muted text-lg max-w-sm">
+        Selected projects. {allWork.length} total.
+      </p>
+    </header>
+
+    {
+      allTags.length > 1 && (
+        <div id="tag-filter" class="flex flex-wrap gap-2 mb-12">
+          <button class="tag-btn active" data-tag="all">
+            All
+          </button>
+          {allTags.map((tag) => (
+            <button class="tag-btn" data-tag={tag}>
+              {tag}
+            </button>
+          ))}
+        </div>
+      )
+    }
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10" id="work-grid">
+      {
+        allWork.map((entry) => (
+          <div class="work-item" data-tags={JSON.stringify(entry.data.tags)}>
+            <WorkCard entry={entry} />
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  const btns = document.querySelectorAll<HTMLButtonElement>('#tag-filter .tag-btn')
+  const items = document.querySelectorAll<HTMLElement>('.work-item')
+
+  btns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const tag = btn.dataset.tag ?? 'all'
+
+      btns.forEach((b) => b.classList.remove('active'))
+      btn.classList.add('active')
+
+      items.forEach((item) => {
+        const tags: string[] = JSON.parse(item.dataset.tags ?? '[]')
+        item.style.display = tag === 'all' || tags.includes(tag) ? '' : 'none'
+      })
+    })
+  })
+</script>

@@ -1,0 +1,80 @@
+---
+export const prerender = true
+
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import PersonCard from '../../components/PersonCard.astro'
+import { getCollection } from 'astro:content'
+
+const people = (await getCollection('people')).sort((a, b) =>
+  a.data.name.localeCompare(b.data.name)
+)
+
+const allTags = [...new Set(people.flatMap((p) => p.data.tags))].sort()
+---
+
+<BaseLayout
+  title="People — Asif Asharaf"
+  description="Designers and builders I respect — and what I actually think of their work."
+>
+  <div class="px-6 sm:px-8 py-16 sm:py-24">
+    <header class="mb-8 sm:mb-12 fade-up">
+      <h1 class="font-serif text-5xl sm:text-7xl text-fg mb-6">People</h1>
+      <p class="text-muted text-lg max-w-md leading-relaxed">
+        Designers, builders, and thinkers I respect. What you'll find here isn't a mutual follow list
+        — it's a curated set of people whose work I've spent real time with, and what I actually
+        think about it.
+      </p>
+    </header>
+
+    {
+      allTags.length > 1 && (
+        <div id="tag-filter" class="flex flex-wrap gap-2 mb-12">
+          <button class="tag-btn active" data-tag="all">
+            All
+          </button>
+          {allTags.map((tag) => (
+            <button class="tag-btn" data-tag={tag}>
+              {tag}
+            </button>
+          ))}
+        </div>
+      )
+    }
+
+    <div
+      id="people-grid"
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+    >
+      {
+        people.map((entry) => (
+          <div class="person-item" data-tags={JSON.stringify(entry.data.tags)}>
+            <PersonCard entry={entry} />
+          </div>
+        ))
+      }
+    </div>
+
+    {people.length === 0 && (
+      <p class="text-muted text-lg py-12">No entries yet. Add some through the CMS.</p>
+    )}
+  </div>
+</BaseLayout>
+
+<script>
+  const btns = document.querySelectorAll<HTMLButtonElement>('#tag-filter .tag-btn')
+  const items = document.querySelectorAll<HTMLElement>('.person-item')
+
+  btns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const tag = btn.dataset.tag ?? 'all'
+
+      btns.forEach((b) => b.classList.remove('active'))
+      btn.classList.add('active')
+
+      items.forEach((item) => {
+        const tags: string[] = JSON.parse(item.dataset.tags ?? '[]')
+        item.style.display = tag === 'all' || tags.includes(tag) ? '' : 'none'
+      })
+    })
+  })
+</script>

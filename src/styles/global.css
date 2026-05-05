@@ -1,0 +1,102 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+  }
+
+  ::selection {
+    background-color: #e8825a;
+    color: #0f0f0f;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0f0f0f;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #1e1e1c;
+    border-radius: 3px;
+  }
+}
+
+@layer components {
+  .tag-pill {
+    @apply text-xs text-muted border border-border px-2.5 py-1 rounded-full tracking-wide;
+  }
+
+  .tag-btn {
+    @apply text-sm text-muted border border-border px-4 py-1.5 rounded-full transition-colors cursor-pointer;
+  }
+  .tag-btn:hover,
+  .tag-btn.active {
+    @apply border-accent text-accent;
+  }
+
+  .prose-antigravity {
+    @apply text-fg/80 leading-relaxed;
+  }
+  .prose-antigravity h1,
+  .prose-antigravity h2,
+  .prose-antigravity h3,
+  .prose-antigravity h4 {
+    @apply font-serif text-fg;
+  }
+  .prose-antigravity a {
+    @apply text-accent underline underline-offset-2 decoration-accent/40 hover:decoration-accent transition-colors;
+  }
+  .prose-antigravity p {
+    @apply mb-6;
+  }
+  .prose-antigravity img {
+    @apply rounded w-full;
+  }
+  .prose-antigravity hr {
+    @apply border-border;
+  }
+  .prose-antigravity blockquote {
+    @apply border-l-2 border-accent pl-6 text-muted italic;
+  }
+  .prose-antigravity code {
+    @apply bg-surface text-fg px-1.5 py-0.5 rounded text-sm;
+  }
+  .prose-antigravity pre {
+    @apply bg-surface rounded-lg p-6 overflow-x-auto;
+  }
+  .prose-antigravity ul,
+  .prose-antigravity ol {
+    @apply pl-6 mb-6 space-y-2;
+  }
+  .prose-antigravity ul {
+    @apply list-disc;
+  }
+  .prose-antigravity ol {
+    @apply list-decimal;
+  }
+}
+
+/* Subtle fade-in on load */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-up {
+  animation: fadeUp 0.6s ease forwards;
+}
+
+.fade-up-delay-1 { animation-delay: 0.1s; opacity: 0; }
+.fade-up-delay-2 { animation-delay: 0.2s; opacity: 0; }
+.fade-up-delay-3 { animation-delay: 0.3s; opacity: 0; }

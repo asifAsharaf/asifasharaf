@@ -1,0 +1,184 @@
+---
+export const prerender = true
+
+import BaseLayout from '../layouts/BaseLayout.astro'
+import WorkCard from '../components/WorkCard.astro'
+import PostCard from '../components/PostCard.astro'
+import PersonRow from '../components/PersonRow.astro'
+import { getCollection } from 'astro:content'
+
+const featuredWork = (await getCollection('work', ({ data }) => data.featured))
+  .sort((a, b) => b.data.year - a.data.year)
+  .slice(0, 3)
+
+const recentPosts = (await getCollection('writing', ({ data }) => !data.draft))
+  .sort((a, b) => new Date(b.data.publishedAt).getTime() - new Date(a.data.publishedAt).getTime())
+  .slice(0, 3)
+
+const featuredPeople = (await getCollection('people', ({ data }) => data.featured)).slice(0, 4)
+---
+
+<BaseLayout title="Asif Asharaf — Senior Product Designer, Bengaluru">
+  <!-- Hero -->
+  <section class="px-6 sm:px-8 pt-12 sm:pt-20 pb-24 sm:pb-40">
+    <div class="max-w-6xl">
+      <div class="flex items-center gap-3 mb-12 sm:mb-20 fade-up">
+        <span class="text-muted text-xs uppercase tracking-[0.2em]">Bengaluru, India</span>
+        <span class="h-px w-8 bg-border" />
+        <span class="text-muted text-xs uppercase tracking-[0.2em]">Available for select work</span>
+      </div>
+
+      <h1 class="font-serif text-[clamp(2.75rem,8vw,7.5rem)] text-fg leading-[0.95] tracking-tight max-w-5xl fade-up">
+        I design things that have to&nbsp;work — and help others
+        get better at&nbsp;it.
+      </h1>
+
+      <p class="text-muted text-lg sm:text-xl mt-12 sm:mt-16 max-w-lg leading-relaxed fade-up fade-up-delay-1">
+        Ten years of product design and one corner of the internet that's finally
+        mine. Currently mentoring designers earlier in their careers and looking for
+        deep, considered briefs.
+      </p>
+    </div>
+  </section>
+
+  <!-- 01 · Selected Work -->
+  {
+    featuredWork.length > 0 && (
+      <section class="px-6 sm:px-8 py-16 sm:py-24 border-t border-border">
+        <div class="flex items-baseline justify-between gap-4 mb-12 sm:mb-16">
+          <div class="flex items-baseline gap-4 sm:gap-6">
+            <span class="text-muted text-sm font-mono">01</span>
+            <h2 class="text-fg text-xs sm:text-sm uppercase tracking-[0.22em]">
+              Selected Work
+            </h2>
+          </div>
+          <a href="/work" class="text-muted hover:text-accent text-sm transition-colors">
+            All work →
+          </a>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10">
+          {featuredWork.map((entry) => (
+            <WorkCard entry={entry} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <!-- 02 · What I do -->
+  <section class="px-6 sm:px-8 py-16 sm:py-24 border-t border-border">
+    <div class="flex items-baseline gap-4 sm:gap-6 mb-12 sm:mb-16">
+      <span class="text-muted text-sm font-mono">02</span>
+      <h2 class="text-fg text-xs sm:text-sm uppercase tracking-[0.22em]">What I Do</h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 sm:gap-16 max-w-5xl">
+      <div>
+        <h3 class="font-serif text-3xl sm:text-4xl text-fg leading-tight mb-4">
+          Product design
+        </h3>
+        <p class="text-muted leading-relaxed">
+          End-to-end product work — from research and strategy through to UI,
+          systems, and shipping. I'm most useful when problems are gnarly and
+          stakes are real.
+        </p>
+      </div>
+      <div>
+        <h3 class="font-serif text-3xl sm:text-4xl text-fg leading-tight mb-4">
+          Design systems
+        </h3>
+        <p class="text-muted leading-relaxed">
+          Building component libraries, tokens, and the documentation around them
+          so design and engineering can move at the same pace without arguing.
+        </p>
+      </div>
+      <div>
+        <h3 class="font-serif text-3xl sm:text-4xl text-fg leading-tight mb-4">
+          Mentorship
+        </h3>
+        <p class="text-muted leading-relaxed">
+          Working with designers earlier in their careers — sharpening
+          problem-solving, portfolio reviews, and the kind of feedback you wish
+          your first manager had given you.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 · Writing -->
+  {
+    recentPosts.length > 0 && (
+      <section class="px-6 sm:px-8 py-16 sm:py-24 border-t border-border">
+        <div class="flex items-baseline justify-between gap-4 mb-12 sm:mb-16">
+          <div class="flex items-baseline gap-4 sm:gap-6">
+            <span class="text-muted text-sm font-mono">03</span>
+            <h2 class="text-fg text-xs sm:text-sm uppercase tracking-[0.22em]">Writing</h2>
+          </div>
+          <a href="/writing" class="text-muted hover:text-accent text-sm transition-colors">
+            All writing →
+          </a>
+        </div>
+        <div>
+          {recentPosts.map((entry) => (
+            <PostCard entry={entry} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <!-- 04 · People I Respect -->
+  {
+    featuredPeople.length > 0 && (
+      <section class="px-6 sm:px-8 py-16 sm:py-24 border-t border-border">
+        <div class="flex items-baseline justify-between gap-4 mb-4">
+          <div class="flex items-baseline gap-4 sm:gap-6">
+            <span class="text-muted text-sm font-mono">04</span>
+            <h2 class="text-fg text-xs sm:text-sm uppercase tracking-[0.22em]">
+              People I Respect
+            </h2>
+          </div>
+          <a href="/people" class="text-muted hover:text-accent text-sm transition-colors">
+            Full directory →
+          </a>
+        </div>
+        <p class="font-serif text-2xl sm:text-3xl text-fg max-w-2xl leading-snug mb-12 sm:mb-16">
+          Designers and builders whose work I follow closely — and what I actually
+          think of it.
+        </p>
+
+        <div class="hidden md:grid grid-cols-[auto_minmax(0,1fr)_auto_auto] items-center gap-x-5 sm:gap-x-8 pb-3 border-b border-border -mx-3 px-3">
+          <div class="w-11" />
+          <div class="text-muted text-xs uppercase tracking-widest">Designer</div>
+          <div class="text-muted text-xs uppercase tracking-widest text-right">Tags</div>
+          <div class="text-muted text-xs uppercase tracking-widest text-right md:min-w-[180px]">
+            Role
+          </div>
+        </div>
+        <div>
+          {featuredPeople.map((entry) => (
+            <PersonRow entry={entry} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Closing CTA -->
+  <section class="px-6 sm:px-8 py-24 sm:py-40 border-t border-border">
+    <div class="max-w-4xl">
+      <span class="text-muted text-xs uppercase tracking-[0.22em] mb-8 block">
+        Get in touch
+      </span>
+      <h2 class="font-serif text-4xl sm:text-6xl text-fg leading-tight mb-8">
+        Have a project that deserves the time?
+      </h2>
+      <a
+        href="mailto:hello@asifasharaf.com"
+        class="text-accent text-lg sm:text-xl hover:underline underline-offset-4"
+      >
+        hello@asifasharaf.com →
+      </a>
+    </div>
+  </section>
+</BaseLayout>

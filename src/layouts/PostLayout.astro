@@ -1,0 +1,44 @@
+---
+import BaseLayout from './BaseLayout.astro'
+
+interface Props {
+  title: string
+  description?: string
+  publishedAt?: Date
+  tags?: string[]
+  ogImage?: string
+}
+
+const { title, description, publishedAt, tags = [], ogImage } = Astro.props
+
+const dateFormatted = publishedAt
+  ? new Intl.DateTimeFormat('en-IN', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }).format(publishedAt)
+  : null
+---
+
+<BaseLayout title={`${title} — Asif Asharaf`} description={description} ogImage={ogImage}>
+  <article class="max-w-2xl mx-auto px-6 sm:px-8 py-16 sm:py-24">
+    <header class="mb-12 fade-up">
+      {tags.length > 0 && (
+        <div class="flex flex-wrap gap-2 mb-6">
+          {tags.map((tag) => <span class="tag-pill">{tag}</span>)}
+        </div>
+      )}
+      <h1 class="font-serif text-4xl sm:text-5xl text-fg leading-tight mb-6">{title}</h1>
+      {description && (
+        <p class="text-muted text-lg leading-relaxed mb-6">{description}</p>
+      )}
+      {dateFormatted && (
+        <time class="text-muted text-sm">{dateFormatted}</time>
+      )}
+    </header>
+
+    <div class="border-t border-border pt-12 prose-antigravity fade-up fade-up-delay-1">
+      <slot />
+    </div>
+  </article>
+</BaseLayout>
