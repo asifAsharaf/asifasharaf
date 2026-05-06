@@ -1,0 +1,22 @@
+---
+interface Props {
+  items: string[]
+  className?: string
+}
+
+const { items, className = '' } = Astro.props
+const doubled = [...items, ...items]
+---
+
+<div class:list={['marquee py-6 border-y border-border', className]}>
+  <div class="marquee-track">
+    {
+      doubled.map((item, i) => (
+        <span class="inline-flex items-center gap-12 text-fg text-xl sm:text-2xl font-serif">
+          <span>{item}</span>
+          <span class="text-accent text-base">✦</span>
+        </span>
+      ))
+    }
+  </div>
+</div>

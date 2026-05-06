@@ -5,6 +5,7 @@ import BaseLayout from '../layouts/BaseLayout.astro'
 import WorkCard from '../components/WorkCard.astro'
 import PostCard from '../components/PostCard.astro'
 import PersonRow from '../components/PersonRow.astro'
+import Marquee from '../components/Marquee.astro'
 import { getCollection } from 'astro:content'
 
 const featuredWork = (await getCollection('work', ({ data }) => data.featured))
@@ -20,20 +21,26 @@ const featuredPeople = (await getCollection('people', ({ data }) => data.feature
 
 <BaseLayout title="Asif Asharaf — Senior Product Designer, Bengaluru">
   <!-- Hero -->
-  <section class="px-6 sm:px-8 pt-12 sm:pt-20 pb-24 sm:pb-40">
+  <section class="px-6 sm:px-8 pt-12 sm:pt-20 pb-20 sm:pb-32">
     <div class="max-w-6xl">
-      <div class="flex items-center gap-3 mb-12 sm:mb-20 fade-up">
+      <div class="flex items-center gap-3 mb-12 sm:mb-16" data-reveal>
         <span class="text-muted text-xs uppercase tracking-[0.2em]">Bengaluru, India</span>
         <span class="h-px w-8 bg-border" />
         <span class="text-muted text-xs uppercase tracking-[0.2em]">Available for select work</span>
       </div>
 
-      <h1 class="font-serif text-[clamp(2.75rem,8vw,7.5rem)] text-fg leading-[0.95] tracking-tight max-w-5xl fade-up">
-        I design things that have to&nbsp;work — and help others
-        get better at&nbsp;it.
+      <h1
+        class="font-serif text-[clamp(2.75rem,8vw,7.5rem)] text-fg leading-[0.98] tracking-tight max-w-5xl"
+        data-split-words
+      >
+        I design things that have to&nbsp;work — and help others get better at&nbsp;it.
       </h1>
 
-      <p class="text-muted text-lg sm:text-xl mt-12 sm:mt-16 max-w-lg leading-relaxed fade-up fade-up-delay-1">
+      <p
+        class="text-muted text-lg sm:text-xl mt-12 sm:mt-16 max-w-lg leading-relaxed"
+        data-reveal
+        style="--reveal-delay: 800ms"
+      >
         Ten years of product design and one corner of the internet that's finally
         mine. Currently mentoring designers earlier in their careers and looking for
         deep, considered briefs.
@@ -41,10 +48,22 @@ const featuredPeople = (await getCollection('people', ({ data }) => data.feature
     </div>
   </section>
 
+  <!-- Marquee strip -->
+  <Marquee
+    items={[
+      'Product Design',
+      'Design Systems',
+      'Mentorship',
+      'Brand Identity',
+      'UX Strategy',
+      'Bengaluru',
+    ]}
+  />
+
   <!-- 01 · Selected Work -->
   {
     featuredWork.length > 0 && (
-      <section class="px-6 sm:px-8 py-16 sm:py-24 border-t border-border">
+      <section class="px-6 sm:px-8 py-16 sm:py-24" data-reveal>
         <div class="flex items-baseline justify-between gap-4 mb-12 sm:mb-16">
           <div class="flex items-baseline gap-4 sm:gap-6">
             <span class="text-muted text-sm font-mono">01</span>
@@ -52,11 +71,11 @@ const featuredPeople = (await getCollection('people', ({ data }) => data.feature
               Selected Work
             </h2>
           </div>
-          <a href="/work" class="text-muted hover:text-accent text-sm transition-colors">
+          <a href="/work" class="link-underline text-muted hover:text-accent text-sm transition-colors">
             All work →
           </a>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10" data-stagger>
           {featuredWork.map((entry) => (
             <WorkCard entry={entry} />
           ))}
@@ -66,13 +85,13 @@ const featuredPeople = (await getCollection('people', ({ data }) => data.feature
   }
 
   <!-- 02 · What I do -->
-  <section class="px-6 sm:px-8 py-16 sm:py-24 border-t border-border">
+  <section class="px-6 sm:px-8 py-16 sm:py-24 border-t border-border" data-reveal>
     <div class="flex items-baseline gap-4 sm:gap-6 mb-12 sm:mb-16">
       <span class="text-muted text-sm font-mono">02</span>
       <h2 class="text-fg text-xs sm:text-sm uppercase tracking-[0.22em]">What I Do</h2>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 sm:gap-16 max-w-5xl">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 sm:gap-16 max-w-5xl" data-stagger>
       <div>
         <h3 class="font-serif text-3xl sm:text-4xl text-fg leading-tight mb-4">
           Product design
@@ -108,17 +127,17 @@ const featuredPeople = (await getCollection('people', ({ data }) => data.feature
   <!-- 03 · Writing -->
   {
     recentPosts.length > 0 && (
-      <section class="px-6 sm:px-8 py-16 sm:py-24 border-t border-border">
+      <section class="px-6 sm:px-8 py-16 sm:py-24 border-t border-border" data-reveal>
         <div class="flex items-baseline justify-between gap-4 mb-12 sm:mb-16">
           <div class="flex items-baseline gap-4 sm:gap-6">
             <span class="text-muted text-sm font-mono">03</span>
             <h2 class="text-fg text-xs sm:text-sm uppercase tracking-[0.22em]">Writing</h2>
           </div>
-          <a href="/writing" class="text-muted hover:text-accent text-sm transition-colors">
+          <a href="/writing" class="link-underline text-muted hover:text-accent text-sm transition-colors">
             All writing →
           </a>
         </div>
-        <div>
+        <div data-stagger>
           {recentPosts.map((entry) => (
             <PostCard entry={entry} />
           ))}
@@ -130,7 +149,7 @@ const featuredPeople = (await getCollection('people', ({ data }) => data.feature
   <!-- 04 · People I Respect -->
   {
     featuredPeople.length > 0 && (
-      <section class="px-6 sm:px-8 py-16 sm:py-24 border-t border-border">
+      <section class="px-6 sm:px-8 py-16 sm:py-24 border-t border-border" data-reveal>
         <div class="flex items-baseline justify-between gap-4 mb-4">
           <div class="flex items-baseline gap-4 sm:gap-6">
             <span class="text-muted text-sm font-mono">04</span>
@@ -138,7 +157,7 @@ const featuredPeople = (await getCollection('people', ({ data }) => data.feature
               People I Respect
             </h2>
           </div>
-          <a href="/people" class="text-muted hover:text-accent text-sm transition-colors">
+          <a href="/people" class="link-underline text-muted hover:text-accent text-sm transition-colors">
             Full directory →
           </a>
         </div>
@@ -155,7 +174,7 @@ const featuredPeople = (await getCollection('people', ({ data }) => data.feature
             Role
           </div>
         </div>
-        <div>
+        <div data-stagger>
           {featuredPeople.map((entry) => (
             <PersonRow entry={entry} />
           ))}
@@ -165,7 +184,7 @@ const featuredPeople = (await getCollection('people', ({ data }) => data.feature
   }
 
   <!-- Closing CTA -->
-  <section class="px-6 sm:px-8 py-24 sm:py-40 border-t border-border">
+  <section class="px-6 sm:px-8 py-24 sm:py-40 border-t border-border" data-reveal>
     <div class="max-w-4xl">
       <span class="text-muted text-xs uppercase tracking-[0.22em] mb-8 block">
         Get in touch
@@ -175,7 +194,7 @@ const featuredPeople = (await getCollection('people', ({ data }) => data.feature
       </h2>
       <a
         href="mailto:hello@asifasharaf.com"
-        class="text-accent text-lg sm:text-xl hover:underline underline-offset-4"
+        class="link-underline text-accent text-lg sm:text-xl"
       >
         hello@asifasharaf.com →
       </a>

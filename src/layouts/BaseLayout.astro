@@ -19,12 +19,24 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://asifasha
 ---
 
 <!doctype html>
-<html lang="en" class="bg-bg text-fg">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
+
+    <!-- Theme bootstrap (runs before paint to prevent flash) -->
+    <script is:inline>
+      (function () {
+        try {
+          const stored = localStorage.getItem('theme')
+          document.documentElement.dataset.theme = stored || 'light'
+        } catch (e) {
+          document.documentElement.dataset.theme = 'light'
+        }
+      })()
+    </script>
 
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -45,7 +57,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://asifasha
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
   </head>
@@ -55,5 +67,61 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://asifasha
       <slot />
     </main>
     <Footer />
+
+    <!-- Motion script: scroll-triggered reveals + word-split for hero -->
+    <script is:inline>
+      (function () {
+        // Word-split for headlines marked with [data-split-words]
+        document.querySelectorAll('[data-split-words]').forEach((el) => {
+          const lines = el.innerHTML.split(/<br\s*\/?>(?:\s*)/i)
+          el.innerHTML = lines
+            .map((line) => {
+              const tmp = document.createElement('div')
+              tmp.innerHTML = line
+              const text = tmp.textContent || ''
+              const words = text.split(/\s+/).filter(Boolean)
+              return (
+                '<span class="word-line">' +
+                words
+                  .map(
+                    (w, i) =>
+                      `<span class="word-wrap"><span class="word" style="--i:${i}">${w}</span></span>`
+                  )
+                  .join(' ') +
+                '</span>'
+              )
+            })
+            .join('')
+
+          // Re-index across lines for continuous stagger
+          const allWords = el.querySelectorAll('.word')
+          allWords.forEach((w, i) => w.style.setProperty('--i', i))
+        })
+
+        // Scroll reveal
+        if (!('IntersectionObserver' in window)) {
+          document
+            .querySelectorAll('[data-reveal], [data-stagger]')
+            .forEach((el) => el.classList.add('in-view'))
+          return
+        }
+
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('in-view')
+                io.unobserve(entry.target)
+              }
+            })
+          },
+          { threshold: 0.12, rootMargin: '0px 0px -8% 0px' }
+        )
+
+        document
+          .querySelectorAll('[data-reveal], [data-stagger]')
+          .forEach((el) => io.observe(el))
+      })()
+    </script>
   </body>
 </html>
