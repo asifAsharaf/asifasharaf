@@ -6,6 +6,9 @@ import WorkCard from '../components/WorkCard.astro'
 import PostCard from '../components/PostCard.astro'
 import PersonRow from '../components/PersonRow.astro'
 import Marquee from '../components/Marquee.astro'
+import Reveal from '../components/motion/Reveal.tsx'
+import Stagger from '../components/motion/Stagger.tsx'
+import SplitWords from '../components/motion/SplitWords.tsx'
 import { getCollection } from 'astro:content'
 
 const featuredWork = (await getCollection('work', ({ data }) => data.featured))
@@ -21,30 +24,61 @@ const featuredPeople = (await getCollection('people', ({ data }) => data.feature
 
 <BaseLayout title="Asif Asharaf — Senior Product Designer, Bengaluru">
   <!-- Hero -->
-  <section class="px-6 sm:px-8 pt-12 sm:pt-20 pb-20 sm:pb-32">
-    <div class="max-w-6xl">
-      <div class="flex items-center gap-3 mb-12 sm:mb-16" data-reveal>
+  <section class="relative px-6 sm:px-8 pt-12 sm:pt-20 pb-20 sm:pb-32">
+    <!-- Floating decorative asterisks -->
+    <span
+      aria-hidden="true"
+      class="hidden md:block absolute top-20 right-12 text-olive text-3xl spin-asterisk select-none"
+      style="animation-duration: 14s"
+    >
+      ✻
+    </span>
+    <span
+      aria-hidden="true"
+      class="hidden md:block absolute top-1/2 right-[18%] text-mustard text-2xl spin-asterisk select-none"
+      style="animation-duration: 10s; animation-direction: reverse"
+    >
+      ✦
+    </span>
+    <span
+      aria-hidden="true"
+      class="hidden md:block absolute bottom-32 right-32 text-rose text-2xl spin-asterisk select-none"
+      style="animation-duration: 18s"
+    >
+      ❋
+    </span>
+
+    <div class="container-page relative">
+      <Reveal client:load as="div" className="flex items-center gap-3 mb-12 sm:mb-16">
         <span class="text-muted text-xs uppercase tracking-[0.2em]">Bengaluru, India</span>
-        <span class="h-px w-8 bg-border" />
-        <span class="text-muted text-xs uppercase tracking-[0.2em]">Available for select work</span>
-      </div>
+        <span class="h-px w-8 bg-accent"></span>
+        <span class="text-muted text-xs uppercase tracking-[0.2em]">
+          <span class="inline-block w-2 h-2 rounded-full bg-olive mr-1.5 align-middle animate-pulse"></span>
+          Available for select work
+        </span>
+      </Reveal>
 
       <h1
         class="font-serif text-[clamp(2.75rem,8vw,7.5rem)] text-fg leading-[0.98] tracking-tight max-w-5xl"
-        data-split-words
       >
-        I design things that have to&nbsp;work — and help others get better at&nbsp;it.
+        <SplitWords
+          client:load
+          text="I design things that have to work — and help others get better at it."
+          highlight={['work', 'better']}
+          highlightClass="squiggle-underline"
+        />
       </h1>
 
-      <p
-        class="text-muted text-lg sm:text-xl mt-12 sm:mt-16 max-w-lg leading-relaxed"
-        data-reveal
-        style="--reveal-delay: 800ms"
+      <Reveal
+        client:load
+        delay={1.1}
+        as="p"
+        className="text-muted text-lg sm:text-xl mt-12 sm:mt-16 max-w-lg leading-relaxed"
       >
         Ten years of product design and one corner of the internet that's finally
         mine. Currently mentoring designers earlier in their careers and looking for
         deep, considered briefs.
-      </p>
+      </Reveal>
     </div>
   </section>
 
@@ -63,84 +97,90 @@ const featuredPeople = (await getCollection('people', ({ data }) => data.feature
   <!-- 01 · Selected Work -->
   {
     featuredWork.length > 0 && (
-      <section class="px-6 sm:px-8 py-16 sm:py-24" data-reveal>
-        <div class="flex items-baseline justify-between gap-4 mb-12 sm:mb-16">
-          <div class="flex items-baseline gap-4 sm:gap-6">
-            <span class="text-muted text-sm font-mono">01</span>
-            <h2 class="text-fg text-xs sm:text-sm uppercase tracking-[0.22em]">
-              Selected Work
-            </h2>
-          </div>
-          <a href="/work" class="link-underline text-muted hover:text-accent text-sm transition-colors">
-            All work →
-          </a>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10" data-stagger>
-          {featuredWork.map((entry) => (
-            <WorkCard entry={entry} />
-          ))}
+      <section class="px-6 sm:px-8 py-16 sm:py-24">
+        <div class="container-page">
+          <Reveal client:visible className="flex items-baseline justify-between gap-4 mb-12 sm:mb-16">
+            <div class="flex items-baseline gap-4 sm:gap-6">
+              <span class="section-num section-num--01">01</span>
+              <h2 class="text-fg text-xs sm:text-sm uppercase tracking-[0.22em]">
+                Selected Work
+              </h2>
+            </div>
+            <a href="/work" class="link-underline text-muted hover:text-accent text-sm transition-colors">
+              All work →
+            </a>
+          </Reveal>
+          <Stagger client:visible className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10">
+            {featuredWork.map((entry) => (
+              <WorkCard entry={entry} />
+            ))}
+          </Stagger>
         </div>
       </section>
     )
   }
 
   <!-- 02 · What I do -->
-  <section class="px-6 sm:px-8 py-16 sm:py-24 border-t border-border" data-reveal>
-    <div class="flex items-baseline gap-4 sm:gap-6 mb-12 sm:mb-16">
-      <span class="text-muted text-sm font-mono">02</span>
-      <h2 class="text-fg text-xs sm:text-sm uppercase tracking-[0.22em]">What I Do</h2>
-    </div>
+  <section class="px-6 sm:px-8 py-16 sm:py-24 border-t border-border">
+    <div class="container-page">
+      <Reveal client:visible className="flex items-baseline gap-4 sm:gap-6 mb-12 sm:mb-16">
+        <span class="section-num section-num--02">02</span>
+        <h2 class="text-fg text-xs sm:text-sm uppercase tracking-[0.22em]">What I Do</h2>
+      </Reveal>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 sm:gap-16 max-w-5xl" data-stagger>
-      <div>
-        <h3 class="font-serif text-3xl sm:text-4xl text-fg leading-tight mb-4">
-          Product design
-        </h3>
-        <p class="text-muted leading-relaxed">
-          End-to-end product work — from research and strategy through to UI,
-          systems, and shipping. I'm most useful when problems are gnarly and
-          stakes are real.
-        </p>
-      </div>
-      <div>
-        <h3 class="font-serif text-3xl sm:text-4xl text-fg leading-tight mb-4">
-          Design systems
-        </h3>
-        <p class="text-muted leading-relaxed">
-          Building component libraries, tokens, and the documentation around them
-          so design and engineering can move at the same pace without arguing.
-        </p>
-      </div>
-      <div>
-        <h3 class="font-serif text-3xl sm:text-4xl text-fg leading-tight mb-4">
-          Mentorship
-        </h3>
-        <p class="text-muted leading-relaxed">
-          Working with designers earlier in their careers — sharpening
-          problem-solving, portfolio reviews, and the kind of feedback you wish
-          your first manager had given you.
-        </p>
-      </div>
+      <Stagger client:visible className="grid grid-cols-1 md:grid-cols-3 gap-12 sm:gap-16 max-w-5xl">
+        <div>
+          <h3 class="font-serif text-3xl sm:text-4xl text-fg leading-tight mb-4">
+            Product design
+          </h3>
+          <p class="text-muted leading-relaxed">
+            End-to-end product work — from research and strategy through to UI,
+            systems, and shipping. I'm most useful when problems are gnarly and
+            stakes are real.
+          </p>
+        </div>
+        <div>
+          <h3 class="font-serif text-3xl sm:text-4xl text-fg leading-tight mb-4">
+            Design systems
+          </h3>
+          <p class="text-muted leading-relaxed">
+            Building component libraries, tokens, and the documentation around them
+            so design and engineering can move at the same pace without arguing.
+          </p>
+        </div>
+        <div>
+          <h3 class="font-serif text-3xl sm:text-4xl text-fg leading-tight mb-4">
+            Mentorship
+          </h3>
+          <p class="text-muted leading-relaxed">
+            Working with designers earlier in their careers — sharpening
+            problem-solving, portfolio reviews, and the kind of feedback you wish
+            your first manager had given you.
+          </p>
+        </div>
+      </Stagger>
     </div>
   </section>
 
   <!-- 03 · Writing -->
   {
     recentPosts.length > 0 && (
-      <section class="px-6 sm:px-8 py-16 sm:py-24 border-t border-border" data-reveal>
-        <div class="flex items-baseline justify-between gap-4 mb-12 sm:mb-16">
-          <div class="flex items-baseline gap-4 sm:gap-6">
-            <span class="text-muted text-sm font-mono">03</span>
-            <h2 class="text-fg text-xs sm:text-sm uppercase tracking-[0.22em]">Writing</h2>
-          </div>
-          <a href="/writing" class="link-underline text-muted hover:text-accent text-sm transition-colors">
-            All writing →
-          </a>
-        </div>
-        <div data-stagger>
-          {recentPosts.map((entry) => (
-            <PostCard entry={entry} />
-          ))}
+      <section class="px-6 sm:px-8 py-16 sm:py-24 border-t border-border">
+        <div class="container-page">
+          <Reveal client:visible className="flex items-baseline justify-between gap-4 mb-12 sm:mb-16">
+            <div class="flex items-baseline gap-4 sm:gap-6">
+              <span class="section-num section-num--03">03</span>
+              <h2 class="text-fg text-xs sm:text-sm uppercase tracking-[0.22em]">Writing</h2>
+            </div>
+            <a href="/writing" class="link-underline text-muted hover:text-accent text-sm transition-colors">
+              All writing →
+            </a>
+          </Reveal>
+          <Stagger client:visible>
+            {recentPosts.map((entry) => (
+              <PostCard entry={entry} />
+            ))}
+          </Stagger>
         </div>
       </section>
     )
@@ -149,55 +189,63 @@ const featuredPeople = (await getCollection('people', ({ data }) => data.feature
   <!-- 04 · People I Respect -->
   {
     featuredPeople.length > 0 && (
-      <section class="px-6 sm:px-8 py-16 sm:py-24 border-t border-border" data-reveal>
-        <div class="flex items-baseline justify-between gap-4 mb-4">
-          <div class="flex items-baseline gap-4 sm:gap-6">
-            <span class="text-muted text-sm font-mono">04</span>
-            <h2 class="text-fg text-xs sm:text-sm uppercase tracking-[0.22em]">
-              People I Respect
-            </h2>
-          </div>
-          <a href="/people" class="link-underline text-muted hover:text-accent text-sm transition-colors">
-            Full directory →
-          </a>
-        </div>
-        <p class="font-serif text-2xl sm:text-3xl text-fg max-w-2xl leading-snug mb-12 sm:mb-16">
-          Designers and builders whose work I follow closely — and what I actually
-          think of it.
-        </p>
+      <section class="px-6 sm:px-8 py-16 sm:py-24 border-t border-border">
+        <div class="container-page">
+          <Reveal client:visible className="flex items-baseline justify-between gap-4 mb-4">
+            <div class="flex items-baseline gap-4 sm:gap-6">
+              <span class="section-num section-num--04">04</span>
+              <h2 class="text-fg text-xs sm:text-sm uppercase tracking-[0.22em]">
+                People I Respect
+              </h2>
+            </div>
+            <a href="/people" class="link-underline text-muted hover:text-accent text-sm transition-colors">
+              Full directory →
+            </a>
+          </Reveal>
+          <Reveal client:visible delay={0.1}>
+            <p class="font-serif text-2xl sm:text-3xl text-fg max-w-2xl leading-snug mb-12 sm:mb-16">
+              Designers and builders whose work I follow closely — and what I actually
+              think of it.
+            </p>
+          </Reveal>
 
-        <div class="hidden md:grid grid-cols-[auto_minmax(0,1fr)_auto_auto] items-center gap-x-5 sm:gap-x-8 pb-3 border-b border-border -mx-3 px-3">
-          <div class="w-11" />
-          <div class="text-muted text-xs uppercase tracking-widest">Designer</div>
-          <div class="text-muted text-xs uppercase tracking-widest text-right">Tags</div>
-          <div class="text-muted text-xs uppercase tracking-widest text-right md:min-w-[180px]">
-            Role
+          <div class="hidden md:grid grid-cols-[auto_minmax(0,1fr)_auto_auto] items-center gap-x-5 sm:gap-x-8 pb-3 border-b border-border -mx-3 px-3">
+            <div class="w-11"></div>
+            <div class="text-muted text-xs uppercase tracking-widest">Designer</div>
+            <div class="text-muted text-xs uppercase tracking-widest text-right">Tags</div>
+            <div class="text-muted text-xs uppercase tracking-widest text-right md:min-w-[180px]">
+              Role
+            </div>
           </div>
-        </div>
-        <div data-stagger>
-          {featuredPeople.map((entry) => (
-            <PersonRow entry={entry} />
-          ))}
+          <Stagger client:visible step={0.06}>
+            {featuredPeople.map((entry) => (
+              <PersonRow entry={entry} />
+            ))}
+          </Stagger>
         </div>
       </section>
     )
   }
 
   <!-- Closing CTA -->
-  <section class="px-6 sm:px-8 py-24 sm:py-40 border-t border-border" data-reveal>
-    <div class="max-w-4xl">
-      <span class="text-muted text-xs uppercase tracking-[0.22em] mb-8 block">
-        Get in touch
-      </span>
-      <h2 class="font-serif text-4xl sm:text-6xl text-fg leading-tight mb-8">
-        Have a project that deserves the time?
-      </h2>
-      <a
-        href="mailto:hello@asifasharaf.com"
-        class="link-underline text-accent text-lg sm:text-xl"
-      >
-        hello@asifasharaf.com →
-      </a>
+  <section class="px-6 sm:px-8 py-24 sm:py-40 border-t border-border">
+    <div class="container-page">
+      <Reveal client:visible>
+        <div class="max-w-4xl">
+          <span class="text-muted text-xs uppercase tracking-[0.22em] mb-8 block">
+            Get in touch
+          </span>
+          <h2 class="font-serif text-4xl sm:text-6xl text-fg leading-tight mb-8">
+            Have a project that deserves the time?
+          </h2>
+          <a
+            href="mailto:hello@asifasharaf.com"
+            class="link-underline text-accent text-lg sm:text-xl"
+          >
+            hello@asifasharaf.com →
+          </a>
+        </div>
+      </Reveal>
     </div>
   </section>
 </BaseLayout>

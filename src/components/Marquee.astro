@@ -6,17 +6,21 @@ interface Props {
 
 const { items, className = '' } = Astro.props
 const doubled = [...items, ...items]
+const colors = ['accent', 'olive', 'mustard', 'rose', 'cobalt']
 ---
 
 <div class:list={['marquee py-6 border-y border-border', className]}>
   <div class="marquee-track">
     {
-      doubled.map((item, i) => (
-        <span class="inline-flex items-center gap-12 text-fg text-xl sm:text-2xl font-serif">
-          <span>{item}</span>
-          <span class="text-accent text-base">✦</span>
-        </span>
-      ))
+      doubled.map((item, i) => {
+        const colorClass = `text-${colors[i % colors.length]}`
+        return (
+          <span class="inline-flex items-center gap-12 text-fg text-xl sm:text-2xl font-serif">
+            <span>{item}</span>
+            <span class:list={['spin-asterisk text-base', colorClass]}>✦</span>
+          </span>
+        )
+      })
     }
   </div>
 </div>
