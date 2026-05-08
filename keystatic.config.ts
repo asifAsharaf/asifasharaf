@@ -18,7 +18,7 @@ export default config({
       format: { contentField: 'body' },
       entryLayout: 'content',
       schema: {
-        title: fields.slug({ nameField: 'title' }),
+        title: fields.slug({ name: { label: 'Title' } }),
         description: fields.text({ label: 'Description (one line)' }),
         year: fields.integer({ label: 'Year' }),
         tags: fields.array(
@@ -50,7 +50,7 @@ export default config({
       format: { contentField: 'body' },
       entryLayout: 'content',
       schema: {
-        title: fields.slug({ nameField: 'title' }),
+        title: fields.slug({ name: { label: 'Title' } }),
         publishedAt: fields.date({ label: 'Published' }),
         summary: fields.text({ label: 'Summary' }),
         tags: fields.array(
@@ -69,7 +69,7 @@ export default config({
       format: { contentField: 'body' },
       entryLayout: 'content',
       schema: {
-        name: fields.slug({ nameField: 'name' }),
+        name: fields.slug({ name: { label: 'Name' } }),
         handle: fields.text({ label: 'Handle / identifier' }),
         role: fields.text({ label: 'Role' }),
         location: fields.text({ label: 'Location' }),
@@ -110,7 +110,7 @@ export default config({
       format: { contentField: 'body' },
       entryLayout: 'content',
       schema: {
-        title: fields.slug({ nameField: 'title' }),
+        title: fields.slug({ name: { label: 'Title' } }),
         company: fields.text({ label: 'Company' }),
         location: fields.text({ label: 'Location (e.g. Remote, Bengaluru)' }),
         type: fields.select({
