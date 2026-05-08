@@ -4,7 +4,6 @@ export const prerender = true
 import BaseLayout from '../layouts/BaseLayout.astro'
 import WorkCard from '../components/WorkCard.astro'
 import PostCard from '../components/PostCard.astro'
-import PersonRow from '../components/PersonRow.astro'
 import Marquee from '../components/Marquee.astro'
 import Reveal from '../components/motion/Reveal.tsx'
 import Stagger from '../components/motion/Stagger.tsx'
@@ -19,7 +18,6 @@ const recentPosts = (await getCollection('writing', ({ data }) => !data.draft))
   .sort((a, b) => new Date(b.data.publishedAt).getTime() - new Date(a.data.publishedAt).getTime())
   .slice(0, 3)
 
-const featuredPeople = (await getCollection('people', ({ data }) => data.featured)).slice(0, 4)
 ---
 
 <BaseLayout title="Asif Asharaf — Senior Product Designer, Bengaluru">
@@ -179,47 +177,6 @@ const featuredPeople = (await getCollection('people', ({ data }) => data.feature
           <Stagger client:visible>
             {recentPosts.map((entry) => (
               <PostCard entry={entry} />
-            ))}
-          </Stagger>
-        </div>
-      </section>
-    )
-  }
-
-  <!-- 04 · People I Respect -->
-  {
-    featuredPeople.length > 0 && (
-      <section class="px-6 sm:px-8 py-16 sm:py-24 border-t border-border">
-        <div class="container-page">
-          <Reveal client:visible className="flex items-baseline justify-between gap-4 mb-4">
-            <div class="flex items-baseline gap-4 sm:gap-6">
-              <span class="section-num section-num--04">04</span>
-              <h2 class="text-fg text-xs sm:text-sm uppercase tracking-[0.22em]">
-                People I Respect
-              </h2>
-            </div>
-            <a href="/people" class="link-underline text-muted hover:text-accent text-sm transition-colors">
-              Full directory →
-            </a>
-          </Reveal>
-          <Reveal client:visible delay={0.1}>
-            <p class="font-serif text-2xl sm:text-3xl text-fg max-w-2xl leading-snug mb-12 sm:mb-16">
-              Designers and builders whose work I follow closely — and what I actually
-              think of it.
-            </p>
-          </Reveal>
-
-          <div class="hidden md:grid grid-cols-[auto_minmax(0,1fr)_auto_auto] items-center gap-x-5 sm:gap-x-8 pb-3 border-b border-border -mx-3 px-3">
-            <div class="w-11"></div>
-            <div class="text-muted text-xs uppercase tracking-widest">Designer</div>
-            <div class="text-muted text-xs uppercase tracking-widest text-right">Tags</div>
-            <div class="text-muted text-xs uppercase tracking-widest text-right md:min-w-[180px]">
-              Role
-            </div>
-          </div>
-          <Stagger client:visible step={0.06}>
-            {featuredPeople.map((entry) => (
-              <PersonRow entry={entry} />
             ))}
           </Stagger>
         </div>

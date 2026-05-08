@@ -43,4 +43,21 @@ const people = defineCollection({
     }),
 })
 
-export const collections = { work, writing, people }
+const jobs = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    company: z.string(),
+    location: z.string(),
+    type: z.enum(['full-time', 'part-time', 'contract', 'freelance', 'internship']),
+    tags: z.array(z.string()).default([]),
+    url: z.string().url(),
+    salary: z.string().optional(),
+    postedAt: z.date(),
+    expiresAt: z.date().optional(),
+    active: z.boolean().default(true),
+    asifNote: z.string().optional(),
+  }),
+})
+
+export const collections = { work, writing, people, jobs }
