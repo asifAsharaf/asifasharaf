@@ -110,11 +110,11 @@ const featuredPeople = (await getCollection('people', ({ data }) => data.feature
               All work →
             </a>
           </Reveal>
-          <Stagger client:visible className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10">
+          <div class="grid grid-cols-3 gap-6 sm:gap-10" data-stagger>
             {featuredWork.map((entry) => (
               <WorkCard entry={entry} />
             ))}
-          </Stagger>
+          </div>
         </div>
       </section>
     )
@@ -128,7 +128,7 @@ const featuredPeople = (await getCollection('people', ({ data }) => data.feature
         <h2 class="text-fg text-xs sm:text-sm uppercase tracking-[0.22em]">What I Do</h2>
       </Reveal>
 
-      <Stagger client:visible className="grid grid-cols-1 md:grid-cols-3 gap-12 sm:gap-16 max-w-5xl">
+      <div class="grid grid-cols-3 gap-8 sm:gap-16 max-w-5xl" data-stagger>
         <div>
           <h3 class="font-serif text-3xl sm:text-4xl text-fg leading-tight mb-4">
             Product design
@@ -158,7 +158,7 @@ const featuredPeople = (await getCollection('people', ({ data }) => data.feature
             your first manager had given you.
           </p>
         </div>
-      </Stagger>
+      </div>
     </div>
   </section>
 
