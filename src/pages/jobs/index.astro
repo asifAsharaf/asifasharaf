@@ -1,0 +1,125 @@
+---
+export const prerender = true
+
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import { getCollection } from 'astro:content'
+
+const allJobs = (await getCollection('jobs'))
+  .sort((a, b) => new Date(b.data.postedAt).getTime() - new Date(a.data.postedAt).getTime())
+
+const activeJobs = allJobs.filter((j) => j.data.active)
+const closedJobs = allJobs.filter((j) => !j.data.active)
+
+const typeLabel: Record<string, string> = {
+  'full-time': 'Full-time',
+  'part-time': 'Part-time',
+  contract: 'Contract',
+  freelance: 'Freelance',
+  internship: 'Internship',
+}
+
+const formatDate = (d: Date) =>
+  new Intl.DateTimeFormat('en-IN', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(d))
+---
+
+<BaseLayout
+  title="Jobs & Opportunities — Asif Asharaf"
+  description="Design roles and opportunities worth knowing about. Curated by Asif Asharaf."
+>
+  <div class="container-page px-6 sm:px-8 py-16 sm:py-24">
+
+    <header class="mb-16 sm:mb-20" data-reveal>
+      <p class="text-muted text-xs uppercase tracking-[0.2em] mb-6">Opportunities</p>
+      <h1 class="font-serif text-5xl sm:text-7xl text-fg leading-tight mb-6">Jobs</h1>
+      <p class="text-muted text-lg max-w-xl leading-relaxed">
+        Roles I come across that seem genuinely worth it. Not a job board — more like a list
+        I'd text to a friend who's looking.
+      </p>
+    </header>
+
+    <!-- Active roles -->
+    {activeJobs.length > 0 ? (
+      <section class="mb-20">
+        <!-- Column headers -->
+        <div class="hidden sm:grid grid-cols-[1fr_auto_auto] gap-x-8 pb-3 border-b border-border mb-1 text-muted text-xs uppercase tracking-widest">
+          <div>Role · Company</div>
+          <div class="text-right w-28">Type</div>
+          <div class="text-right w-40">Posted</div>
+        </div>
+
+        {activeJobs.map((job) => (
+          <a
+            href={`/jobs/${job.slug}`}
+            class="group grid grid-cols-1 sm:grid-cols-[1fr_auto_auto] gap-x-8 gap-y-3 py-6 border-b border-dashed border-border hover:bg-surface/40 -mx-3 px-3 rounded-sm transition-colors"
+            data-reveal
+          >
+            <!-- Left: role + company + tags -->
+            <div class="min-w-0">
+              <div class="flex items-baseline gap-3 flex-wrap mb-2">
+                <span class="font-medium text-fg text-lg group-hover:text-accent transition-colors">
+                  {job.data.title}
+                </span>
+                <span class="text-muted">·</span>
+                <span class="text-muted">{job.data.company}</span>
+              </div>
+              <div class="flex items-center gap-3 flex-wrap mb-2 text-sm text-muted">
+                <span>{job.data.location}</span>
+                {job.data.salary && (
+                  <>
+                    <span>·</span>
+                    <span class="text-olive">{job.data.salary}</span>
+                  </>
+                )}
+              </div>
+              {job.data.asifNote && (
+                <p class="text-muted text-sm leading-relaxed max-w-2xl italic">
+                  "{job.data.asifNote}"
+                </p>
+              )}
+              <div class="flex flex-wrap gap-1.5 mt-3">
+                {job.data.tags.map((tag) => (
+                  <span class="tag-pill">{tag}</span>
+                ))}
+              </div>
+            </div>
+
+            <!-- Type -->
+            <div class="hidden sm:flex items-start pt-1 justify-end w-28">
+              <span class="tag-pill text-accent border-accent/40">{typeLabel[job.data.type]}</span>
+            </div>
+
+            <!-- Date + apply arrow -->
+            <div class="hidden sm:flex flex-col items-end justify-between pt-1 w-40">
+              <span class="text-muted text-sm">{formatDate(job.data.postedAt)}</span>
+              <span class="text-accent text-sm mt-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                View →
+              </span>
+            </div>
+          </a>
+        ))}
+      </section>
+    ) : (
+      <div class="py-24 text-center border border-dashed border-border rounded-lg" data-reveal>
+        <p class="font-serif text-2xl text-fg mb-3">Nothing open right now</p>
+        <p class="text-muted">Check back soon — I post roles as I come across them.</p>
+      </div>
+    )}
+
+    <!-- Closed / archived -->
+    {closedJobs.length > 0 && (
+      <section>
+        <h2 class="text-muted text-xs uppercase tracking-widest mb-6">Closed / Archived</h2>
+        {closedJobs.map((job) => (
+          <div class="flex items-baseline justify-between gap-4 py-4 border-b border-dashed border-border opacity-50">
+            <div>
+              <span class="text-fg line-through">{job.data.title}</span>
+              <span class="text-muted ml-3">{job.data.company}</span>
+            </div>
+            <span class="text-muted text-sm shrink-0">{formatDate(job.data.postedAt)}</span>
+          </div>
+        ))}
+      </section>
+    )}
+
+  </div>
+</BaseLayout>

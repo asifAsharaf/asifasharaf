@@ -8,7 +8,11 @@
     --rgb-bg: 250 249 244;
     --rgb-fg: 26 26 24;
     --rgb-muted: 125 121 110;
-    --rgb-accent: 218 102 65;
+    --rgb-accent: 218 102 65;     /* terracotta */
+    --rgb-olive: 132 145 89;      /* sage olive */
+    --rgb-rose: 200 116 110;      /* dusty rose */
+    --rgb-mustard: 212 168 75;    /* warm mustard */
+    --rgb-cobalt: 66 95 138;      /* dusty cobalt */
     --rgb-border: 224 220 208;
     --rgb-surface: 242 239 230;
   }
@@ -19,6 +23,10 @@
     --rgb-fg: 245 245 240;
     --rgb-muted: 136 136 127;
     --rgb-accent: 232 130 90;
+    --rgb-olive: 168 184 113;
+    --rgb-rose: 222 144 138;
+    --rgb-mustard: 230 192 105;
+    --rgb-cobalt: 122 158 206;
     --rgb-border: 30 30 28;
     --rgb-surface: 22 22 20;
   }
@@ -50,6 +58,67 @@
 }
 
 @layer components {
+  .container-page {
+    @apply max-w-[1280px] mx-auto w-full;
+  }
+
+  /* Hand-drawn underline that paints in on view */
+  .squiggle-underline {
+    position: relative;
+    display: inline-block;
+  }
+  .squiggle-underline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.08em;
+    height: 0.22em;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 8' preserveAspectRatio='none'><path d='M0 5 Q 12 1, 25 4 T 50 4 T 75 4 T 100 4' stroke='%23da6641' stroke-width='2' fill='none' stroke-linecap='round'/></svg>");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    transform-origin: left center;
+    animation: squiggle-in 1s 1.4s ease-out backwards;
+  }
+  :root[data-theme='dark'] .squiggle-underline::after {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 8' preserveAspectRatio='none'><path d='M0 5 Q 12 1, 25 4 T 50 4 T 75 4 T 100 4' stroke='%23e8825a' stroke-width='2' fill='none' stroke-linecap='round'/></svg>");
+  }
+  @keyframes squiggle-in {
+    from { transform: scaleX(0); opacity: 0; }
+    to   { transform: scaleX(1); opacity: 1; }
+  }
+
+  /* Section number — colored, animated on hover */
+  .section-num {
+    @apply font-mono text-sm transition-transform duration-300;
+    display: inline-block;
+  }
+  .section-num--01 { color: rgb(var(--rgb-accent)); }
+  .section-num--02 { color: rgb(var(--rgb-olive)); }
+  .section-num--03 { color: rgb(var(--rgb-mustard)); }
+  .section-num--04 { color: rgb(var(--rgb-rose)); }
+  .section-num--05 { color: rgb(var(--rgb-cobalt)); }
+  section:hover .section-num {
+    transform: rotate(-6deg) translateY(-2px);
+  }
+
+  /* Spinning asterisk decoration */
+  .spin-asterisk {
+    display: inline-block;
+    animation: spin-slow 8s linear infinite;
+    transform-origin: center;
+  }
+  @keyframes spin-slow {
+    to { transform: rotate(360deg); }
+  }
+
+  /* Color-cycling tag */
+  .tag-pill-1 { @apply border-accent/50 text-accent; }
+  .tag-pill-2 { @apply border-olive/50 text-olive; }
+  .tag-pill-3 { @apply border-mustard/50 text-mustard; }
+  .tag-pill-4 { @apply border-rose/50 text-rose; }
+  .tag-pill-5 { @apply border-cobalt/50 text-cobalt; }
+
   .tag-pill {
     @apply text-xs text-muted border border-border px-2.5 py-1 rounded-full tracking-wide;
   }

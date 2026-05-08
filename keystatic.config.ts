@@ -102,6 +102,53 @@ export default config({
         body: fields.mdx({ label: 'Extended notes (optional)' }),
       },
     }),
+
+    jobs: collection({
+      label: 'Jobs & Opportunities',
+      slugField: 'title',
+      path: 'src/content/jobs/*',
+      format: { contentField: 'body' },
+      entryLayout: 'content',
+      schema: {
+        title: fields.slug({ nameField: 'title' }),
+        company: fields.text({ label: 'Company' }),
+        location: fields.text({ label: 'Location (e.g. Remote, Bengaluru)' }),
+        type: fields.select({
+          label: 'Type',
+          options: [
+            { label: 'Full-time', value: 'full-time' },
+            { label: 'Part-time', value: 'part-time' },
+            { label: 'Contract', value: 'contract' },
+            { label: 'Freelance', value: 'freelance' },
+            { label: 'Internship', value: 'internship' },
+          ],
+          defaultValue: 'full-time',
+        }),
+        tags: fields.array(
+          fields.text({ label: 'Tag' }),
+          { label: 'Tags (e.g. product design, ux, research)', itemLabel: (props) => props.fields.value.value ?? 'Tag' }
+        ),
+        url: fields.url({ label: 'Apply / Original job URL' }),
+        salary: fields.text({
+          label: 'Salary / Compensation (optional)',
+          description: 'e.g. ₹20–30L, $80–100k, Not disclosed',
+          validation: { isRequired: false },
+        }),
+        postedAt: fields.date({ label: 'Date posted' }),
+        expiresAt: fields.date({
+          label: 'Expires (optional)',
+          validation: { isRequired: false },
+        }),
+        active: fields.checkbox({ label: 'Still open / active', defaultValue: true }),
+        asifNote: fields.text({
+          label: "Asif's Note",
+          multiline: true,
+          description: 'Why you think this is worth sharing.',
+          validation: { isRequired: false },
+        }),
+        body: fields.mdx({ label: 'Full job description (optional)' }),
+      },
+    }),
   },
 
   singletons: {

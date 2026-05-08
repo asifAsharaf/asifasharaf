@@ -26,6 +26,14 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://asifasha
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
 
+    <!-- Google Tag Manager -->
+    <script is:inline>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-NQ3WN8PJ');</script>
+    <!-- End Google Tag Manager -->
+
     <!-- Theme bootstrap (runs before paint to prevent flash) -->
     <script is:inline>
       (function () {
@@ -62,6 +70,10 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://asifasha
     />
   </head>
   <body class="min-h-screen flex flex-col font-sans antialiased">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NQ3WN8PJ"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
     <Nav />
     <main class="flex-1">
       <slot />
