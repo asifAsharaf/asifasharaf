@@ -2,8 +2,8 @@ import { config, collection, singleton, fields } from '@keystatic/core'
 
 export default config({
   storage: {
-    // Switch to 'github' + fill in repo details for production (see README)
-    kind: 'local',
+    kind: 'github',
+    repo: { owner: 'asifAsharaf', name: 'asifasharaf' },
   },
 
   ui: {
