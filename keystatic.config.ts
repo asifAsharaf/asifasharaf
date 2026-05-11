@@ -23,7 +23,7 @@ export default config({
         year: fields.integer({ label: 'Year' }),
         tags: fields.array(
           fields.text({ label: 'Tag' }),
-          { label: 'Tags', itemLabel: (props) => props.fields.value.value ?? 'Tag' }
+          { label: 'Tags', itemLabel: (props) => props.value ?? 'Tag' }
         ),
         coverImage: fields.image({
           label: 'Cover Image',
@@ -55,7 +55,7 @@ export default config({
         summary: fields.text({ label: 'Summary' }),
         tags: fields.array(
           fields.text({ label: 'Tag' }),
-          { label: 'Tags', itemLabel: (props) => props.fields.value.value ?? 'Tag' }
+          { label: 'Tags', itemLabel: (props) => props.value ?? 'Tag' }
         ),
         draft: fields.checkbox({ label: 'Draft', defaultValue: false }),
         body: fields.mdx({ label: 'Body' }),
@@ -81,7 +81,7 @@ export default config({
         }),
         tags: fields.array(
           fields.text({ label: 'Tag' }),
-          { label: 'Skill tags (e.g. motion, brand, ui)', itemLabel: (props) => props.fields.value.value ?? 'Tag' }
+          { label: 'Skill tags (e.g. motion, brand, ui)', itemLabel: (props) => props.value ?? 'Tag' }
         ),
         relationship: fields.select({
           label: 'Relationship',
@@ -126,7 +126,7 @@ export default config({
         }),
         tags: fields.array(
           fields.text({ label: 'Tag' }),
-          { label: 'Tags (e.g. product design, ux, research)', itemLabel: (props) => props.fields.value.value ?? 'Tag' }
+          { label: 'Tags (e.g. product design, ux, research)', itemLabel: (props) => props.value ?? 'Tag' }
         ),
         url: fields.url({ label: 'Apply / Original job URL' }),
         salary: fields.text({
