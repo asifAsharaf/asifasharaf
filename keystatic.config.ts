@@ -51,8 +51,14 @@ export default config({
       entryLayout: 'content',
       schema: {
         title: fields.slug({ name: { label: 'Title' } }),
-        publishedAt: fields.date({ label: 'Published' }),
-        summary: fields.text({ label: 'Summary' }),
+        publishedAt: fields.date({
+          label: 'Published',
+          defaultValue: { kind: 'today' },
+        }),
+        summary: fields.text({
+          label: 'Summary',
+          validation: { isRequired: false },
+        }),
         tags: fields.array(
           fields.text({ label: 'Tag' }),
           { label: 'Tags', itemLabel: (props) => props.value ?? 'Tag' }
