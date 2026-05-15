@@ -19,8 +19,8 @@ const writing = defineCollection({
   type: 'content',
   schema: z.object({
     title: z.string(),
-    publishedAt: z.date(),
-    summary: z.string(),
+    publishedAt: z.date().optional(),
+    summary: z.string().optional(),
     tags: z.array(z.string()).default([]),
     draft: z.boolean().default(false),
   }),

@@ -14,8 +14,8 @@ const featuredWork = (await getCollection('work', ({ data }) => data.featured))
   .sort((a, b) => b.data.year - a.data.year)
   .slice(0, 3)
 
-const recentPosts = (await getCollection('writing', ({ data }) => !data.draft))
-  .sort((a, b) => new Date(b.data.publishedAt).getTime() - new Date(a.data.publishedAt).getTime())
+const recentPosts = (await getCollection('writing', ({ data }) => !data.draft && !!data.publishedAt))
+  .sort((a, b) => new Date(b.data.publishedAt!).getTime() - new Date(a.data.publishedAt!).getTime())
   .slice(0, 3)
 
 ---
