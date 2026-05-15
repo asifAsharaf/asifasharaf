@@ -1,4 +1,6 @@
 ---
+import { LINKEDIN_URL, INSTAGRAM_URL, EMAIL } from '../lib/social'
+
 const year = new Date().getFullYear()
 ---
 
@@ -13,7 +15,7 @@ const year = new Date().getFullYear()
         <ul class="flex items-center gap-6">
           <li>
             <a
-              href="https://www.linkedin.com/in/asifcasharaf/"
+              href={LINKEDIN_URL}
               target="_blank"
               rel="noopener noreferrer"
               class="text-muted hover:text-fg text-sm transition-colors"
@@ -23,7 +25,7 @@ const year = new Date().getFullYear()
           </li>
           <li>
             <a
-              href="https://www.instagram.com/asifcasharaf/"
+              href={INSTAGRAM_URL}
               target="_blank"
               rel="noopener noreferrer"
               class="text-muted hover:text-fg text-sm transition-colors"
@@ -33,7 +35,7 @@ const year = new Date().getFullYear()
           </li>
           <li>
             <a
-              href="mailto:hello@asifasharaf.com"
+              href={`mailto:${EMAIL}`}
               class="text-muted hover:text-fg text-sm transition-colors"
             >
               Email
