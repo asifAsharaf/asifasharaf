@@ -1,4 +1,4 @@
-# Antigravity — asifasharaf.com
+# asifasharaf.com
 
 Asif Asharaf's personal portfolio site. Built with [Astro](https://astro.build), styled with Tailwind CSS, managed via [Keystatic CMS](https://keystatic.com), deployed on Cloudflare Pages.
 
