@@ -22,7 +22,7 @@ const recentPosts = (await getCollection('writing', ({ data }) => !data.draft &&
 
 <BaseLayout title="Asif Asharaf — Senior Product Designer, Bengaluru">
   <!-- Hero -->
-  <section class="relative px-6 sm:px-8 pt-12 sm:pt-20 pb-20 sm:pb-32">
+  <section class="relative px-6 sm:px-8 pt-12 sm:pt-20 pb-12 sm:pb-20">
     <!-- Floating decorative asterisks -->
     <span
       aria-hidden="true"
@@ -108,7 +108,7 @@ const recentPosts = (await getCollection('writing', ({ data }) => !data.draft &&
               All work →
             </a>
           </Reveal>
-          <div class="grid grid-cols-3 gap-6 sm:gap-10" data-stagger>
+          <div class:list={["grid gap-6 sm:gap-10", featuredWork.length === 2 ? "grid-cols-2" : "grid-cols-3"]} data-stagger>
             {featuredWork.map((entry) => (
               <WorkCard entry={entry} />
             ))}

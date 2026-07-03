@@ -50,6 +50,21 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags))].sort()
       <p class="text-muted text-lg py-12">Nothing published yet. Check back soon.</p>
     )}
   </div>
+
+  <!-- Bottom CTA -->
+  <section class="border-t border-border px-6 sm:px-8 py-20 sm:py-32">
+    <div class="container-page">
+      <div class="max-w-2xl" data-reveal>
+        <span class="text-muted text-xs uppercase tracking-[0.22em] mb-6 block">Stay in touch</span>
+        <h2 class="font-serif text-3xl sm:text-5xl text-fg leading-tight mb-6">
+          Thoughts worth sharing, as they come.
+        </h2>
+        <a href="https://www.linkedin.com/in/asifcasharaf/" target="_blank" rel="noopener noreferrer" class="link-underline text-accent text-lg">
+          Follow on LinkedIn →
+        </a>
+      </div>
+    </div>
+  </section>
 </BaseLayout>
 
 <script>
