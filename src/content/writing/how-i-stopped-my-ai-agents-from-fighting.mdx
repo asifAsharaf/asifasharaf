@@ -1,0 +1,71 @@
+---
+title: "How I Stopped My AI Agents From Fighting Over the Same Ticket"
+publishedAt: 2026-07-03
+summary: "A dead-simple locking pattern for anyone running more than one coding agent — no database, no infra, just git."
+tags: ["ai", "engineering", "process"]
+draft: false
+---
+
+One agent is magic. Five agents in parallel — plus a co-founder running their own swarm — is a different animal. The failure mode:
+
+1. You keep a backlog of GitHub issues.
+2. Each free agent runs `gh issue list`, grabs the top ticket, starts coding.
+3. Two agents grab the **same** ticket because they looked at the same moment.
+4. Two branches, two PRs, same files → **merge conflict, wasted tokens, wasted time.**
+
+It's not an AI problem. It's a distributed-systems problem in a hoodie: many workers, one shared queue, no coordination. The fix is a **lock** — and you don't need Redis for it.
+
+## A label is NOT a lock
+
+"Just add an `in-progress` label so others skip it" doesn't work:
+
+```
+Agent A: list → #640 free ✓
+Agent B: list → #640 free ✓   ← B read before A wrote
+Agent A: add label
+Agent B: add label            ← idempotent, B never notices
+→ both now "working" on #640
+```
+
+Labels, assignees, columns are all **read-then-write**. To actually prevent the race you need one **atomic** operation where exactly one agent wins and the rest provably fail (compare-and-swap).
+
+## The trick: your git remote is already a lock server
+
+**Creating a ref on a git server is atomic.** Two machines pushing the same *new* tag → the server accepts one, rejects the other. That's your mutex.
+
+```bash
+git tag -a claim/640 -m "agent=asif-laptop nonce=$RANDOM"
+git push origin refs/tags/claim/640   # ← the atomic gate
+```
+
+- Push **succeeds** → you own #640. Go code.
+- Push **rejected** → someone beat you → pick another ticket.
+
+Works across every machine and agent, because they share one `origin`. Zero new infra.
+
+> **Gotcha:** use *annotated* tags with a nonce. Lightweight tags on the same commit can hash-collide into a false "up-to-date" success where both agents think they won.
+
+Tested live: `A: WON (ref created)` / `B: REJECTED — exactly one winner ✓`
+
+## The full loop
+
+```
+1. pick next eligible ticket
+2. CLAIM atomically  ── lost? → back to 1
+3. spin an isolated git worktree   (no file collisions)
+4. run the agent    …heartbeat every 5 min
+5. release: --done or --blocked
+   ↺ a reaper frees claims with no heartbeat past a TTL (skips open PRs)
+```
+
+- **Worktrees** keep parallel agents off each other's files.
+- **Heartbeat + reaper** = crashed agents self-heal; live ones never get interrupted.
+- **Mirror the claim** to a label + Project board *after* winning — the label is the *display* of the lock, not the lock.
+
+## Bonus: a human design gate
+
+Going design-driven? Add two labels: `design:required` and `design:approved`. Agents skip and refuse any `design:required` ticket until a human adds `design:approved`. Plumbing runs fast; anything users see waits for human sign-off. Vibe coding with guardrails.
+
+## Takeaway
+
+If you run more than one coding agent, **make "picking a ticket" an exclusive act.** A label isn't a lock — you need atomic compare-and-swap, and your git remote already gives you one: push a `claim/<id>` tag, first writer wins, the rest get rejected. Add heartbeats, mirror to a board, gate design work behind human approval. No Redis required.

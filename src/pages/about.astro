@@ -2,21 +2,22 @@
 export const prerender = true
 
 import BaseLayout from '../layouts/BaseLayout.astro'
+import { LINKEDIN_URL, INSTAGRAM_URL, EMAIL } from '../lib/social'
 ---
 
 <BaseLayout
   title="About — Asif Asharaf"
-  description="Designer based in Bengaluru, India."
+  description="Senior product designer based in Bengaluru, India."
 >
   <div class="max-w-2xl mx-auto px-6 sm:px-8 py-16 sm:py-24">
-    <header class="mb-16 fade-up">
+    <header class="mb-16" data-reveal>
       <h1 class="font-serif text-5xl sm:text-7xl text-fg leading-tight mb-8">
         About
       </h1>
     </header>
 
-    <div class="space-y-16 fade-up fade-up-delay-1">
-      <section>
+    <div class="space-y-16">
+      <section data-reveal>
         <p class="text-fg text-xl leading-relaxed font-light mb-6">
           I'm Asif Asharaf — a senior product designer based in Bengaluru, India. I work on
           digital products and the systems that hold them together.
@@ -24,7 +25,7 @@ import BaseLayout from '../layouts/BaseLayout.astro'
         <p class="text-muted text-lg leading-relaxed mb-6">
           A lot of my time goes into mentoring designers earlier in their careers — helping
           them sharpen their problem-solving instincts and find their footing in UX and UI
-          work. The recommendations on my <a href="https://www.linkedin.com/in/asifcasharaf/" target="_blank" rel="noopener noreferrer" class="text-accent hover:underline">LinkedIn</a>
+          work. The recommendations on my <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" class="text-accent hover:underline">LinkedIn</a>
           probably say it better than I can.
         </p>
         <p class="text-muted text-lg leading-relaxed">
@@ -33,28 +34,14 @@ import BaseLayout from '../layouts/BaseLayout.astro'
         </p>
       </section>
 
-      <section class="border-t border-border pt-12">
-        <h2 class="font-serif text-2xl text-fg mb-6">Currently</h2>
-        <p class="text-muted leading-relaxed">
-          [What you're working on right now — fill this in]
-        </p>
-      </section>
-
-      <section class="border-t border-border pt-12">
-        <h2 class="font-serif text-2xl text-fg mb-6">Previously</h2>
-        <p class="text-muted leading-relaxed">
-          [Past roles, clients, or projects — fill this in]
-        </p>
-      </section>
-
-      <section class="border-t border-border pt-12">
+      <section class="border-t border-border pt-12" data-reveal>
         <h2 class="font-serif text-2xl text-fg mb-6">Get in touch</h2>
         <div class="flex flex-col gap-3">
-          <a href="mailto:hello@asifasharaf.com" class="text-accent hover:underline">
-            hello@asifasharaf.com
+          <a href={`mailto:${EMAIL}`} class="text-accent hover:underline">
+            {EMAIL}
           </a>
           <a
-            href="https://www.linkedin.com/in/asifcasharaf/"
+            href={LINKEDIN_URL}
             target="_blank"
             rel="noopener noreferrer"
             class="text-muted hover:text-fg transition-colors"
@@ -62,7 +49,7 @@ import BaseLayout from '../layouts/BaseLayout.astro'
             LinkedIn →
           </a>
           <a
-            href="https://www.instagram.com/asifcasharaf/"
+            href={INSTAGRAM_URL}
             target="_blank"
             rel="noopener noreferrer"
             class="text-muted hover:text-fg transition-colors"
