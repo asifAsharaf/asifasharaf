@@ -6,6 +6,7 @@ import keystatic from '@keystatic/astro'
 import react from '@astrojs/react'
 
 export default defineConfig({
+  site: 'https://asifasharaf.com',
   output: 'static',
   adapter: cloudflare({
     platformProxy: { enabled: true },

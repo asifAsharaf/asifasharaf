@@ -1,0 +1,5 @@
+# Canonicalize all traffic onto https://asifasharaf.com
+# Note: www.asifasharaf.com must be attached as a custom domain on the
+# Cloudflare Pages project for the first rule to take effect.
+https://www.asifasharaf.com/* https://asifasharaf.com/:splat 301
+https://asifasharaf.pages.dev/* https://asifasharaf.com/:splat 301
